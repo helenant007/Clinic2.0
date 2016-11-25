@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "List based on Section";
+}
+
+
+<link rel="stylesheet" href="~/Content/pickaday.default.css" />
+<link rel="stylesheet" href="~/Content/pickaday.default.date.css" />
+<link rel="stylesheet" href="~/Content/pickaday.default.time.css" />
+<script src="~/scripts/picker.js"></script>
+<script src="~/scripts/picker.date.js"></script>
+<script>
+    $(function () {
+        $(".pickadate").pickadate();
+    })
+</script>
+<script src="~/scripts/angular.min.js"></script>
+
+
+
+<script>
+    var ref;
+
+    (function () {
+
+        angular
+        .module('viewSectionList', [])
+        .controller('myCtrl', function ($http){
+            var vm = this;
+            ref = vm;
+
+            vm.med = null;
+
+
+
+            vm.selectMonth = (new Date().getMonth() + 1).toString(); 
+            vm.monthsInYear = [];
+            vm.sectionList = [];
+            vm.diagnoses = [];
+
+            vm.sectionList = [];
+            vm.visitors = {
+                VisitDate: null,
+                Section : null,
+                BinusianID : null,
+                Name: null,
+                Phone: null,
+                Diagnose: null,
+                Anamnesis: null,
+                Implementation: null,
+                Notes: null
+
+            };
+                
+            //oke lanjut ada mslh pa lgi
+
+            $http.post('@Url.Action("GetMonthsData", "Shared")').then(function success(res) {
+                vm.monthsInYear = res.data;
+            });
+
+            $http.post('@Url.Action("GetSectionList", "Shared")').then(function success(res) {
+                vm.sectionList = res.data;
+            });
+
+            $http.post('@Url.Action("GetDiagnoses", "Shared")').then(function success(res) {
+                vm.diagnoses = res.data;
+            });
+
+        })
+    })()
+
+</script>
+<div ng-app="viewSectionList" ng-controller="myCtrl as vm">
+    
+    <div class="content-top-1 transparent">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="col-sm-5 pull-right">
+                    <select class="form-control" ng-model="vm.selectMonth">
+                        <option ng-repeat="x in vm.monthsInYear" value="{{x.Value}}">{{x.MonthName}}</option>
+                    </select>
+                </div>
+                <h3>List based on Section</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Num</th>
+                            <th>Diagnose</th>
+                            <th ng-repeat="x in vm.sectionList">{{x.Abbr}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- binding sama daftar penyakit -->
+                        
+                        
+                        <tr ng-repeat="(i, x) in vm.diagnoses">
+                            <td>{{i + 1}}</td>
+                            <td>{{x.DiagnoseName}}</td>
+                            <td ng-repeat="x in vm.sectionList"> 1 </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<script>
+    var today = new Date();
+    var day = today.getDay();
+    var dd = today.getDate();
+    var mm = today.getMonth();
+    var yyyy = today.getFullYear();
+
+    
+
+
+    var weekdaysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var monthsFull = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+
+    var showToday = weekdaysShort[day] + ', ' + dd + ' ' + monthsFull[mm] + ' ' + yyyy;
+
+</script>
+
+

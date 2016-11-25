@@ -1,0 +1,536 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+}
+<script src="~/scripts/Chart.js"></script>
+<script src="~/scripts/pie-chart.js"></script>
+<script src="~/scripts/skycons.js"></script>
+<!--//skycons-icons-->
+<script src="~/scripts/angular.min.js"></script>
+
+<script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#demo-pie-1').pieChart({
+                barColor: '#3bb2d0',
+                trackColor: '#eee',
+                lineCap: 'round',
+                lineWidth: 8,
+                onStep: function (from, to, percent) {
+                    $(this.element).find('.pie-value').text(Math.round(percent) + '%');
+                }
+            });
+
+            $('#demo-pie-2').pieChart({
+                barColor: '#fbb03b',
+                trackColor: '#eee',
+                lineCap: 'butt',
+                lineWidth: 8,
+                onStep: function (from, to, percent) {
+                    $(this.element).find('.pie-value').text(Math.round(percent) + '%');
+                }
+            });
+
+            $('#demo-pie-3').pieChart({
+                barColor: '#ed6498',
+                trackColor: '#eee',
+                lineCap: 'square',
+                lineWidth: 8,
+                onStep: function (from, to, percent) {
+                    $(this.element).find('.pie-value').text(Math.round(percent) + '%');
+                }
+            });
+
+
+        });
+
+</script>
+
+<script>
+    var refvm;
+    var refres;
+    var refforecast;
+
+    angular
+    .module('myApp', [])
+    .controller('myCtrl', function ($http) {
+        var vm = this;
+        refvm = vm;
+        
+        vm.weather = null;
+        vm.day = null;
+        vm.date = null;
+        vm.month = null;
+        vm.year = null;
+
+        vm.forecast = null;
+
+        (function () {
+                var tempday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                var tempmonth = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+                $http({
+                    method: 'GET',
+                    //url: 'http://api.apixu.com/v1/current.json?key=8cf548eab48942808f6121848160809&q=Tangerang'
+                }).then(function (response) {
+                    refres = response;
+                    vm.weather = response.data;
+                    var temp = new Date(Date.parse(response.data.location.localtime));
+                    vm.day = tempday[temp.getDay()];
+                    vm.date = temp.getDate();
+                    vm.month = tempmonth[temp.getMonth()];
+                    vm.year = temp.getFullYear();
+                }, function (response) {
+
+                });
+
+                $http({
+                    method: 'GET',
+                   // url: 'http://api.apixu.com/v1/forecast.json?key=8cf548eab48942808f6121848160809&q=Tangerang'
+                }).then(function (response) {
+                    refforecast = response;
+
+                }, function (response) {
+
+                });
+        })();
+
+       
+
+        //$.get("http://api.apixu.com/v1/current.json?key=8cf548eab48942808f6121848160809&q=Tangerang", function (res) {
+        //    vm.weather = res;
+        //    alert('test');  
+        //});
+    });
+</script>
+
+
+<div ng-app="myApp" ng-controller="myCtrl as vm" class="grid-system">
+
+    <div class="content-top col-md-12">
+
+        <div class="content-top-1 col-md-3 greet head-grid">
+            <div class="col-md-10 top-content">
+                <h5>Good Morning,</h5>
+                <label>Helena</label>
+            </div>
+
+            <div class="clearfix"> </div>
+        </div>
+        <div class="content-top-1 col-md-3 colorme-yellow head-grid">
+            <div class="col-md-6 top-content">
+                <h5>Monthly Visits</h5>
+                <label>8761</label>
+            </div>
+
+            <div class="clearfix"> </div>
+        </div>
+        <div class="content-top-1 col-md-3 colorme-green head-grid">
+            <div class="col-md-11 top-content">
+                <h5>Monthly Medicine's Usage</h5>
+                <label>8761</label>
+            </div>
+
+            <div class="clearfix"> </div>
+        </div>
+        <div class="content-top-1 col-md-3 modal-danger head-grid">
+            <div class="col-md-10 top-content">
+                <h5>Monthly Hospitalized</h5>
+                <label>3401</label>
+            </div>
+
+            <div class="clearfix"> </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+    </div>
+
+    <div class="col-md-12 ">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3><i class="glyphicon glyphicon-inbox"></i> &nbsp; Notification</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <td>Panadol is going to expired on September 19</td>
+                        </tr>
+                        <tr>
+                            <td>Tolak Angin's Stock is 1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-mid">
+
+        <div class="col-md-12">
+            <div class="weather">
+                <div class="weather-top">
+                    <div class="weather-top-left">
+                        <div class="degree">
+                            <figure class="icons">
+                                <canvas id="partly-cloudy-day" width="64" height="64"></canvas>
+                            </figure>
+                            <span id="test123">
+                                {{vm.weather.current.temp_c}}°
+                            </span>
+                            <div class="clearfix"></div>
+                        </div>
+                        <script>
+                            var icons = new Skycons({ "color": "#1ABC9C" }),
+                                 list = [
+                                   "clear-night", "partly-cloudy-day",
+                                   "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+                                   "fog"
+                                 ],
+                                 i;
+
+                            for (i = list.length; i--;)
+                                icons.set(list[i], list[i]);
+
+                            icons.play();
+                        </script>
+                        <p>
+                            {{vm.day}},
+                            {{vm.month}}
+                            <label> {{vm.date}}</label>
+                        </p>
+                    </div>
+                    <div class="weather-top-right">
+                        <p><i class="fa fa-map-marker"></i>{{vm.weather.location.name}}</p>
+                        <label>{{vm.weather.location.region}}</label>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="weather-bottom">
+                    <div class="weather-bottom1">
+                        <div class="weather-head">
+                            <h4>Cloudy</h4>
+                            <figure class="icons">
+                                <canvas id="cloudy" width="58" height="58"></canvas>
+                            </figure>
+                            <script>
+                                var icons = new Skycons({ "color": "#999" }),
+                                     list = [
+                                       "clear-night", "cloudy",
+                                       "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+                                       "fog"
+                                     ],
+                                     i;
+
+                                for (i = list.length; i--;)
+                                    icons.set(list[i], list[i]);
+
+                                icons.play();
+                            </script>
+                            <h6>20°</h6>
+                            <div class="bottom-head">
+                                <p>August 16</p>
+                                <p>Monday</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weather-bottom1 ">
+                        <div class="weather-head">
+                            <h4>Sunny</h4>
+                            <figure class="icons">
+                                <canvas id="clear-day" width="58" height="58"></canvas>
+                            </figure>
+                            <script>
+                                var icons = new Skycons({ "color": "#999" }),
+                                     list = [
+                                       "clear-night", "clear-day",
+                                       "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+                                       "fog"
+                                     ],
+                                     i;
+
+                                for (i = list.length; i--;)
+                                    icons.set(list[i], list[i]);
+
+                                icons.play();
+                            </script>
+                            <h6>37°</h6>
+                            <div class="bottom-head">
+                                <p>August 17</p>
+                                <p>Tuesday</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weather-bottom1">
+                        <div class="weather-head">
+                            <h4>Rainy</h4>
+                            <figure class="icons">
+                                <canvas id="sleet" width="58" height="58"></canvas>
+                            </figure>
+                            <script>
+                                var icons = new Skycons({ "color": "#999" }),
+                                     list = [
+                                       "clear-night", "clear-day",
+                                       "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+                                       "fog"
+                                     ],
+                                     i;
+
+                                for (i = list.length; i--;)
+                                    icons.set(list[i], list[i]);
+
+                                icons.play();
+                            </script>
+
+                            <h6>7°</h6>
+                            <div class="bottom-head">
+                                <p>August 18</p>
+                                <p>Wednesday</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weather-bottom1 ">
+                        <div class="weather-head">
+                            <h4>Snowy</h4>
+                            <figure class="icons">
+                                <canvas id="snow" width="58" height="58"></canvas>
+                            </figure>
+                            <script>
+                                var icons = new Skycons({ "color": "#999" }),
+                                     list = [
+                                       "clear-night", "clear-day",
+                                       "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+                                       "fog"
+                                     ],
+                                     i;
+
+                                for (i = list.length; i--;)
+                                    icons.set(list[i], list[i]);
+
+                                icons.play();
+                            </script>
+                            <h6>-10°</h6>
+                            <div class="bottom-head">
+                                <p>August 16</p>
+                                <p>Thursday</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="clearfix"> </div>
+    </div>
+
+    <script>
+        var today = new Date().getMonth();
+
+        var monthsFull = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        var month;
+        this.month = monthsFull[today];
+        document.getElementById('thismonth').innerHTML = month;
+    </script>
+
+    <div class="col-md-6 ">
+       
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3>Emergency Calls</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover">
+                            <tbody>
+                                <!-- perhatikan baik baik  : istilahnya mirip foreach : ok? ke napa itu mirip json, karena itu emang struktur json ntapz -->
+
+                                <tr>
+                                    <td>Polisi</td>
+                                    <td>110</td>
+                                </tr>
+                                <tr>
+                                    <td>Pemadam Kebakaran</td>
+                                    <td>113 atau 1131</td>
+                                </tr>
+                                <tr>
+                                    <td>Ambulans</td>
+                                    <td>118 atau 119</td>
+                                </tr>
+                                <tr>
+                                    <td>Palang Merah Indonesia</td>
+                                    <td>(021) 4207051</td>
+                                </tr>
+                                <tr>
+                                    <td>Posko Bencana Alam</td>
+                                    <td>129</td>
+                                </tr>
+                                <tr>
+                                    <td>SAR / Search And Rescue</td>
+                                    <td>115</td>
+                                </tr>
+                                <tr>
+                                    <td>Sentra Informasi Keracunan</td>
+                                    <td>(021) 4250767 atau 4227875</td>
+                                </tr>
+                                <tr>
+                                    <td>Informasi Gangguan Listrik</td>
+                                    <td>123</td>
+                                </tr>
+                                <tr>
+                                    <td>Informasi Gangguan Telepon</td>
+                                    <td>117</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+    <div class="col-md-6 content-top-2">
+        <!---start-chart---->
+        <!----->
+        <div class="content-graph">
+
+            <!--graph-->
+            <link href="~/Content/graph.css" rel="stylesheet" />
+            <!--//graph-->
+            <script src="~/scripts/jquery.flot.js"></script>
+            <script>
+									$(document).ready(function () {
+
+										// Graph Data ##############################################
+										var graphData = [{
+										    // Pengunjung dalam seminggu 1-7
+										    //labels : ["Mon","Tue","Wed","Thu","Fri","Sat"], ga bisa kasih string sepertinya ckckck
+												data: [ [8, 1900], [9, 100], [10, 500], [11, 200], [12, 200], [13, 1950], [14, 1900]],
+												color: '#FBB03B'
+											}, 
+										];
+
+										// Lines Graph #############################################
+										$.plot($('#graph-lines'), graphData, {
+											series: {
+												points: {
+													show: true,
+													radius: 5
+												},
+												lines: {
+												    show: true,
+												    color: '#FBB03B' // nambahin warna di barnya
+												},
+												shadowSize: 0
+											},
+											grid: {
+												color: '#7f8c8d',
+												borderColor: 'transparent',
+												borderWidth: 20,
+												hoverable: true
+											},
+											xaxis: {
+												tickColor: 'transparent'
+										
+											},
+											yaxis: {
+												tickSize: 1000
+											}
+										});
+
+										// Bars Graph ##############################################
+										$.plot($('#graph-bars'), graphData, {
+											series: {
+												bars: {
+													show: true,
+													barWidth: .9,
+													align: 'center'
+												},
+												shadowSize: 0
+											},
+											grid: {
+												color: '#7f8c8d',
+												borderColor: 'transparent',
+												borderWidth: 20,
+												hoverable: true
+											},
+											xaxis: {
+												tickColor: 'transparent'
+											
+											},
+											yaxis: {
+												tickSize: 1000
+											}
+										});
+
+										// Graph Toggle ############################################
+										$('#graph-bars').hide();
+
+										$('#lines').on('click', function (e) {
+											$('#bars').removeClass('active');
+											$('#graph-bars').fadeOut();
+											$(this).addClass('active');
+											$('#graph-lines').fadeIn();
+											e.preventDefault();
+										});
+
+										$('#bars').on('click', function (e) {
+											$('#lines').removeClass('active');
+											$('#graph-lines').fadeOut();
+											$(this).addClass('active');
+											$('#graph-bars').fadeIn().removeClass('hidden');
+											e.preventDefault();
+										});
+
+										// Tooltip #################################################
+										function showTooltip(x, y, contents) {
+											$('<div id="tooltip">' + contents + '</div>').css({
+												top: y - 16,
+												left: x + 20
+											}).appendTo('body').fadeIn();
+										}
+
+										var previousPoint = null;
+
+										$('#graph-lines, #graph-bars').bind('plothover', function (event, pos, item) {
+											if (item) {
+												if (previousPoint != item.dataIndex) {
+													previousPoint = item.dataIndex;
+													$('#tooltip').remove();
+													var x = item.datapoint[0],
+														y = item.datapoint[1];
+														showTooltip(item.pageX, item.pageY, y + ' visitors at ' + x + '.00h');
+												}
+											} else {
+												$('#tooltip').remove();
+												previousPoint = null;
+											}
+										});
+
+									});
+            </script>
+            <div class="graph-container">
+                <div class="graph">
+                    <h4>Weekly Visitors Count</h4>
+                </div>
+                <div id="graph-lines"> </div>
+                <div id="graph-bars"> </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="clearfix"> </div>
+</div>
+<!---->
+
+
+<script>
+        var today = new Date().getMonth();
+
+        var monthsFull = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        var month;
+        this.month = monthsFull[today];
+        document.getElementById('thismonth').innerHTML = month;
+</script>

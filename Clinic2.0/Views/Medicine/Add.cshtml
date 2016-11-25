@@ -1,0 +1,329 @@
+﻿
+@{
+    ViewBag.Title = "Add Medicine";
+}
+
+<link rel="stylesheet" href="~/Content/pickaday.default.css" />
+<link rel="stylesheet" href="~/Content/pickaday.default.date.css" />
+<link rel="stylesheet" href="~/Content/pickaday.default.time.css" />
+<script src="~/scripts/picker.js"></script>
+<script src="~/scripts/picker.date.js"></script>
+<script>
+    $(function () {
+        $(".pickadate").pickadate();
+    })
+</script>
+<script src="~/scripts/angular.min.js"></script>
+
+<script>
+    var ref;
+
+    (function () {
+
+        angular
+            .module('AddMedicine', [])
+            .controller('myCtrl', function ($http) {
+                var vm = this;
+                ref = vm;
+
+                vm.handleServerError =
+                    function errorCallback(err) {
+                        alert("Server Error!");
+                    };
+
+                vm.selectMonth = (new Date().getMonth() + 1).toString();
+                vm.meds = [];
+                vm.med = null;
+                vm.medTypes = [];
+                vm.monthsInYear = [];
+
+                $http.post('@Url.Action("GetMonthsData","Shared")').then(function (res) {
+                    vm.monthsInYear = res.data;
+                });
+
+                $http.post('@Url.Action("StockViewModel")').then(
+                   function (res) {
+                       vm.meds = res.data.Medicines;
+                   }, vm.handleServerError);
+
+
+
+                $http.post('@Url.Action("GetMedicineTypes")').then(
+                    function success(res) {
+                        vm.medTypes = res.data;
+                    }, vm.handleServerError
+                );
+
+                vm.submitNewMedicTypeForm = function () {
+
+                }
+
+                vm.removeMedicine =
+                    {
+                        remove: function (med) {
+                            $http.post('@Url.Action("DeleteMedicine")', { id: med.Id }).then(successCallback, vm.handleServerError);
+
+                            function successCallback(res) {
+                                if (res.data == true) {
+                                    //vm.meds = [{ a: 1, b: 2 }];
+                                    vm.meds.splice(vm.meds.indexOf(med), 1);
+                                }
+                            }
+                        }
+                    }
+
+
+                vm.AddMedicForm = {
+                    Data: {
+                        Name: null,
+                        Qty: null,
+                        Type: 'null',
+                        Price: null,
+                        ExpDate: null,
+                        AddedDate: today,
+                    },
+                    UseMedicine: 'null',
+                    save: function () {
+                        $http.post('@Url.Action("AddMedicine")', vm.AddMedicForm.Data).then(successCallback, errorCallback);
+
+                        function successCallback(res) {
+                            debugger;
+
+                            if (res.data.Upsert == 1) {
+                                vm.meds.push({
+                                    Id: res.data.Id,
+                                    Name: res.data.Name,
+                                    Qty: res.data.Qty,
+                                    Type: res.data.Type
+                                });
+                            } else {
+                                for (i = 0; i < vm.meds.length; i++) {
+                                    if (vm.meds[i].Id == res.data.Id) {
+                                        vm.meds[i].Qty = res.data.Qty;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            vm.addMedicine.isSaving = false;
+                        }
+                        function errorCallback(err) {
+                            vm.handleServerError();
+                            vm.addMedicine.isSaving = false;
+                        }
+                    }
+                }
+
+                vm.addMedicine =
+                        {
+                            Name: "",
+                            Type: "",
+
+                            modal: function () {
+                                $("#modalAddMedicine").modal('show');
+                            },
+                            validate: function () {
+                                if (this.Name == "" || this.Type == "")
+                                    return false;
+                                return true;
+                            },
+                            isSaving: false,
+                            save: function () {
+                                if (this.validate() == false) {
+                                    alert("");
+                                    return;
+                                }
+                                if (vm.addMedicine.isSaving) {
+                                    alert("Please wait. Server is processing your request.");
+                                    return;
+                                }
+
+                                vm.addMedicine.isSaving = true;
+
+                                
+
+                                vm.addMedicine.Name = "";
+                                vm.addMedicine.Type = "";
+                            }
+                        };
+
+                //vm.modalShowData = function () {
+                //    $("#modalShowData").modal();
+
+                //};
+                vm.modal = {
+                    data: null,
+                    selectData: function (med) {
+                        vm.modal.data = med;
+                        refS = vm.modal.data;
+                    }
+                }
+            });
+
+    })()
+</script>
+
+
+
+<div ng-app="AddMedicine" ng-controller="myCtrl as vm">
+
+    <div id="modalShowData" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Medicine Details</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="Name" ng-model="vm.modal.data.Name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Type</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" ng-model="vm.modal.data.Type">
+                                    <option ng-repeat="x in vm.medTypes" value="{{x.Value}}">{{x.Value}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Stock</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" placeholder="Stock">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Expired Dates</label>
+                            <div class="col-sm-9">
+                                <select class="form-control">
+                                    <option ng-repeat="x in vm.medTypes" value="{{x.Value}}">{{x.Value}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-ok"></i> &nbsp; &nbsp; Save Changes</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" ng-click="vm.removeMedicine.remove(med)"><i class="glyphicon glyphicon-trash"></i> &nbsp; &nbsp; Delete Data </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <div class="content-top-1 transparent">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+
+                <h3>Add New Type of Medicine</h3>
+            </div>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <br />
+                    <label for="inputDate" class="col-sm-2 control-label"></label> <!--nanti ini selalu ambil date di saat dia di input-->
+                    <div class="col-sm-8">
+                        <span id="dateToday"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Name" ng-model="vm.AddMedicForm.Data.Name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label> <!--bisa ga di bawahnya ada pilihan buat nambahin jenis baru?-->
+                    <div class="col-sm-8">
+                        <select class="form-control" ng-model="vm.AddMedicForm.Data.Type">
+                            <option disabled value="null">Select Type</option>
+                            <option ng-repeat="type in vm.medTypes" value="{{type.Value}}">{{type.Value}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Quantity" ng-model="vm.AddMedicForm.Data.Qty" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Price in IDR" ng-model="vm.AddMedicForm.Data.Price">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8">
+                        <input type="date" class="pickadate form-control" placeholder="Pick Expired Date" ng-model="vm.AddMedicForm.Data.ExpDate">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-8">
+                        <button type="button" class="btn btn-success btn-sm" ng-click="vm.AddMedicForm.save()"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp; &nbsp; Save</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="content-top-1 transparent">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="col-sm-5 pull-right">
+                    <select class="form-control" ng-model="vm.selectMonth">
+                        <option ng-repeat="x in vm.monthsInYear" value="{{x.Value}}">{{x.MonthName}}</option>
+                    </select>
+                </div>
+                <h3>Medicine's Mutation History</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Expired Date</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr ng-repeat="med in vm.meds" ng-click="vm.modal.selectData(med)" data-toggle="modal" data-target="#modalShowData">
+                            <td>{{med.Name}}</td>
+                            <td>{{med.Type}}</td>
+                            <td>{{med.ExpDate}}</td>
+                            <td>{{med.Qty}}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<script>
+    var today = new Date();
+    var day = today.getDay();
+    var dd = today.getDate();
+    var mm = today.getMonth();
+    var yyyy = today.getFullYear();
+
+
+
+    var weekdaysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var monthsFull = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+
+    today = weekdaysShort[day] + ', ' + dd + ' ' + monthsFull[mm] + ' ' + yyyy;
+    document.getElementById('dateToday').innerHTML = today;
+
+</script>

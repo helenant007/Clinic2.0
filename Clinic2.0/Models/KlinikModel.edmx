@@ -1,0 +1,818 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ClinicApp.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ClinicAppStoreContainer">
+    <EntitySet Name="MsPatients" EntityType="ClinicApp.Store.MsPatients" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PatientVisits" EntityType="ClinicApp.Store.PatientVisits" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DetailPatientVisits" EntityType="ClinicApp.Store.DetailPatientVisits" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MsMedicinePurchases" EntityType="ClinicApp.Store.MsMedicinePurchases" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MsMedicines" EntityType="ClinicApp.Store.MsMedicines" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MedicineStocks" EntityType="ClinicApp.Store.MedicineStocks" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DetailMedicinePurchases" EntityType="ClinicApp.Store.DetailMedicinePurchases" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Admins" EntityType="ClinicApp.Store.Admins" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DetailHospitalizeds" EntityType="ClinicApp.Store.DetailHospitalizeds" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MsHospitalizeds" EntityType="ClinicApp.Store.MsHospitalizeds" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MsDiagnoses" EntityType="ClinicApp.Store.MsDiagnoses" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MsSections" EntityType="ClinicApp.Store.MsSections" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MsMedicineTypes" EntityType="ClinicApp.Store.MsMedicineTypes" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="MedicinePurchaseDetailMedicinePurchase" Association="ClinicApp.Store.MedicinePurchaseDetailMedicinePurchase">
+      <End Role="MedicinePurchase" EntitySet="MsMedicinePurchases" />
+      <End Role="DetailMedicinePurchase" EntitySet="DetailMedicinePurchases" />
+    </AssociationSet>
+    <AssociationSet Name="MedicineMedicineStock" Association="ClinicApp.Store.MedicineMedicineStock">
+      <End Role="Medicine" EntitySet="MsMedicines" />
+      <End Role="MedicineStock" EntitySet="MedicineStocks" />
+    </AssociationSet>
+    <AssociationSet Name="MedicineDetailMedicinePurchase" Association="ClinicApp.Store.MedicineDetailMedicinePurchase">
+      <End Role="Medicine" EntitySet="MsMedicines" />
+      <End Role="DetailMedicinePurchase" EntitySet="DetailMedicinePurchases" />
+    </AssociationSet>
+    <AssociationSet Name="PatientVisitDetailPatientVisit" Association="ClinicApp.Store.PatientVisitDetailPatientVisit">
+      <End Role="PatientVisit" EntitySet="PatientVisits" />
+      <End Role="DetailPatientVisit" EntitySet="DetailPatientVisits" />
+    </AssociationSet>
+    <AssociationSet Name="PatientPatientVisit" Association="ClinicApp.Store.PatientPatientVisit">
+      <End Role="Patient" EntitySet="MsPatients" />
+      <End Role="PatientVisit" EntitySet="PatientVisits" />
+    </AssociationSet>
+    <AssociationSet Name="PatientDetailHospitalized" Association="ClinicApp.Store.PatientDetailHospitalized">
+      <End Role="Patient" EntitySet="MsPatients" />
+      <End Role="DetailHospitalized" EntitySet="DetailHospitalizeds" />
+    </AssociationSet>
+    <AssociationSet Name="HospitalizedDetailHospitalized" Association="ClinicApp.Store.HospitalizedDetailHospitalized">
+      <End Role="Hospitalized" EntitySet="MsHospitalizeds" />
+      <End Role="DetailHospitalized" EntitySet="DetailHospitalizeds" />
+    </AssociationSet>
+    <AssociationSet Name="MsSectionMsPatient" Association="ClinicApp.Store.MsSectionMsPatient">
+      <End Role="MsSection" EntitySet="MsSections" />
+      <End Role="MsPatient" EntitySet="MsPatients" />
+    </AssociationSet>
+    <AssociationSet Name="MsDiagnoseDetailHospitalized" Association="ClinicApp.Store.MsDiagnoseDetailHospitalized">
+      <End Role="MsDiagnose" EntitySet="MsDiagnoses" />
+      <End Role="DetailHospitalized" EntitySet="DetailHospitalizeds" />
+    </AssociationSet>
+    <AssociationSet Name="MsDiagnosePatientVisit" Association="ClinicApp.Store.MsDiagnosePatientVisit">
+      <End Role="MsDiagnose" EntitySet="MsDiagnoses" />
+      <End Role="PatientVisit" EntitySet="PatientVisits" />
+    </AssociationSet>
+    <AssociationSet Name="DetailPatientVisitMsMedicine" Association="ClinicApp.Store.DetailPatientVisitMsMedicine">
+      <End Role="DetailPatientVisit" EntitySet="DetailPatientVisits" />
+      <End Role="MsMedicine" EntitySet="MsMedicines" />
+    </AssociationSet>
+    <AssociationSet Name="MsMedicineMsMedicineType" Association="ClinicApp.Store.MsMedicineMsMedicineType">
+      <End Role="MsMedicine" EntitySet="MsMedicines" />
+      <End Role="MsMedicineType" EntitySet="MsMedicineTypes" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="MsPatients">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BinusianId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Gender" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BloodType" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Phone" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="MsSection_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PatientVisits">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Anamnesis" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Implementation" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Notes" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="VisitDate" Type="datetime" Nullable="false" />
+    <Property Name="Patient_Id" Type="int" Nullable="false" />
+    <Property Name="MsDiagnose_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DetailPatientVisits">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Qty" Type="int" Nullable="false" />
+    <Property Name="PatientVisit_Id" Type="int" Nullable="false" />
+    <Property Name="MsMedicines_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MsMedicinePurchases">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Total" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MsMedicines">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Qty" Type="int" Nullable="false" />
+    <Property Name="MsMedicineTypes_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MedicineStocks">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ExpDate" Type="datetime" Nullable="false" />
+    <Property Name="Medicine_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DetailMedicinePurchases">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Price" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Qty" Type="int" Nullable="false" />
+    <Property Name="ExpDate" Type="datetime" Nullable="false" />
+    <Property Name="MedicinePurchase_Id" Type="int" Nullable="false" />
+    <Property Name="Medicine_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Admins">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Pass" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DetailHospitalizeds">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HospitalName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Notes" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Patient_Id" Type="int" Nullable="false" />
+    <Property Name="Hospitalized_Id" Type="int" Nullable="false" />
+    <Property Name="MsDiagnose_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MsHospitalizeds">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MsDiagnoses">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DiagnoseName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MsSections">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SectionName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Abbr" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MsMedicineTypes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="MedicinePurchaseDetailMedicinePurchase">
+    <End Role="MedicinePurchase" Type="ClinicApp.Store.MsMedicinePurchases" Multiplicity="1" />
+    <End Role="DetailMedicinePurchase" Type="ClinicApp.Store.DetailMedicinePurchases" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MedicinePurchase">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DetailMedicinePurchase">
+        <PropertyRef Name="MedicinePurchase_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="MedicineMedicineStock">
+    <End Role="Medicine" Type="ClinicApp.Store.MsMedicines" Multiplicity="1" />
+    <End Role="MedicineStock" Type="ClinicApp.Store.MedicineStocks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Medicine">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MedicineStock">
+        <PropertyRef Name="Medicine_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="MedicineDetailMedicinePurchase">
+    <End Role="Medicine" Type="ClinicApp.Store.MsMedicines" Multiplicity="1" />
+    <End Role="DetailMedicinePurchase" Type="ClinicApp.Store.DetailMedicinePurchases" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Medicine">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DetailMedicinePurchase">
+        <PropertyRef Name="Medicine_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PatientVisitDetailPatientVisit">
+    <End Role="PatientVisit" Type="ClinicApp.Store.PatientVisits" Multiplicity="1" />
+    <End Role="DetailPatientVisit" Type="ClinicApp.Store.DetailPatientVisits" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PatientVisit">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DetailPatientVisit">
+        <PropertyRef Name="PatientVisit_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PatientPatientVisit">
+    <End Role="Patient" Type="ClinicApp.Store.MsPatients" Multiplicity="1" />
+    <End Role="PatientVisit" Type="ClinicApp.Store.PatientVisits" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientVisit">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PatientDetailHospitalized">
+    <End Role="Patient" Type="ClinicApp.Store.MsPatients" Multiplicity="1" />
+    <End Role="DetailHospitalized" Type="ClinicApp.Store.DetailHospitalizeds" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DetailHospitalized">
+        <PropertyRef Name="Patient_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="HospitalizedDetailHospitalized">
+    <End Role="Hospitalized" Type="ClinicApp.Store.MsHospitalizeds" Multiplicity="1" />
+    <End Role="DetailHospitalized" Type="ClinicApp.Store.DetailHospitalizeds" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hospitalized">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DetailHospitalized">
+        <PropertyRef Name="Hospitalized_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="MsSectionMsPatient">
+    <End Role="MsSection" Type="ClinicApp.Store.MsSections" Multiplicity="1" />
+    <End Role="MsPatient" Type="ClinicApp.Store.MsPatients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MsSection">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MsPatient">
+        <PropertyRef Name="MsSection_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="MsDiagnoseDetailHospitalized">
+    <End Role="MsDiagnose" Type="ClinicApp.Store.MsDiagnoses" Multiplicity="1" />
+    <End Role="DetailHospitalized" Type="ClinicApp.Store.DetailHospitalizeds" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MsDiagnose">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DetailHospitalized">
+        <PropertyRef Name="MsDiagnose_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="MsDiagnosePatientVisit">
+    <End Role="MsDiagnose" Type="ClinicApp.Store.MsDiagnoses" Multiplicity="1" />
+    <End Role="PatientVisit" Type="ClinicApp.Store.PatientVisits" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MsDiagnose">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PatientVisit">
+        <PropertyRef Name="MsDiagnose_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DetailPatientVisitMsMedicine">
+    <End Role="DetailPatientVisit" Type="ClinicApp.Store.DetailPatientVisits" Multiplicity="*" />
+    <End Role="MsMedicine" Type="ClinicApp.Store.MsMedicines" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="MsMedicine">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DetailPatientVisit">
+        <PropertyRef Name="MsMedicines_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="MsMedicineMsMedicineType">
+    <End Role="MsMedicine" Type="ClinicApp.Store.MsMedicines" Multiplicity="*" />
+    <End Role="MsMedicineType" Type="ClinicApp.Store.MsMedicineTypes" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="MsMedicineType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MsMedicine">
+        <PropertyRef Name="MsMedicineTypes_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ClinicApp" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="KlinikModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="MsPatients" EntityType="ClinicApp.MsPatient" />
+          <EntitySet Name="PatientVisits" EntityType="ClinicApp.PatientVisit" />
+          <EntitySet Name="DetailPatientVisits" EntityType="ClinicApp.DetailPatientVisit" />
+          <EntitySet Name="MsMedicinePurchases" EntityType="ClinicApp.MsMedicinePurchase" />
+          <EntitySet Name="MsMedicines" EntityType="ClinicApp.MsMedicine" />
+          <EntitySet Name="MedicineStocks" EntityType="ClinicApp.MedicineStock" />
+          <EntitySet Name="DetailMedicinePurchases" EntityType="ClinicApp.DetailMedicinePurchase" />
+          <EntitySet Name="Admins" EntityType="ClinicApp.Admin" />
+          <EntitySet Name="DetailHospitalizeds" EntityType="ClinicApp.DetailHospitalized" />
+          <EntitySet Name="MsHospitalizeds" EntityType="ClinicApp.MsHospitalized" />
+          <AssociationSet Name="MedicinePurchaseDetailMedicinePurchase" Association="ClinicApp.MedicinePurchaseDetailMedicinePurchase">
+            <End Role="MedicinePurchase" EntitySet="MsMedicinePurchases" />
+            <End Role="DetailMedicinePurchase" EntitySet="DetailMedicinePurchases" />
+          </AssociationSet>
+          <AssociationSet Name="MedicineMedicineStock" Association="ClinicApp.MedicineMedicineStock">
+            <End Role="Medicine" EntitySet="MsMedicines" />
+            <End Role="MedicineStock" EntitySet="MedicineStocks" />
+          </AssociationSet>
+          <AssociationSet Name="MedicineDetailMedicinePurchase" Association="ClinicApp.MedicineDetailMedicinePurchase">
+            <End Role="Medicine" EntitySet="MsMedicines" />
+            <End Role="DetailMedicinePurchase" EntitySet="DetailMedicinePurchases" />
+          </AssociationSet>
+          <AssociationSet Name="PatientVisitDetailPatientVisit" Association="ClinicApp.PatientVisitDetailPatientVisit">
+            <End Role="PatientVisit" EntitySet="PatientVisits" />
+            <End Role="DetailPatientVisit" EntitySet="DetailPatientVisits" />
+          </AssociationSet>
+          <AssociationSet Name="PatientPatientVisit" Association="ClinicApp.PatientPatientVisit">
+            <End Role="Patient" EntitySet="MsPatients" />
+            <End Role="PatientVisit" EntitySet="PatientVisits" />
+          </AssociationSet>
+          <AssociationSet Name="PatientDetailHospitalized" Association="ClinicApp.PatientDetailHospitalized">
+            <End Role="Patient" EntitySet="MsPatients" />
+            <End Role="DetailHospitalized" EntitySet="DetailHospitalizeds" />
+          </AssociationSet>
+          <AssociationSet Name="HospitalizedDetailHospitalized" Association="ClinicApp.HospitalizedDetailHospitalized">
+            <End Role="Hospitalized" EntitySet="MsHospitalizeds" />
+            <End Role="DetailHospitalized" EntitySet="DetailHospitalizeds" />
+          </AssociationSet>
+          <EntitySet Name="MsDiagnoses" EntityType="ClinicApp.MsDiagnose" />
+          <EntitySet Name="MsSections" EntityType="ClinicApp.MsSection" />
+          <AssociationSet Name="MsSectionMsPatient" Association="ClinicApp.MsSectionMsPatient">
+            <End Role="MsSection" EntitySet="MsSections" />
+            <End Role="MsPatient" EntitySet="MsPatients" />
+          </AssociationSet>
+          <AssociationSet Name="MsDiagnoseDetailHospitalized" Association="ClinicApp.MsDiagnoseDetailHospitalized">
+            <End Role="MsDiagnose" EntitySet="MsDiagnoses" />
+            <End Role="DetailHospitalized" EntitySet="DetailHospitalizeds" />
+          </AssociationSet>
+          <AssociationSet Name="MsDiagnosePatientVisit" Association="ClinicApp.MsDiagnosePatientVisit">
+            <End Role="MsDiagnose" EntitySet="MsDiagnoses" />
+            <End Role="PatientVisit" EntitySet="PatientVisits" />
+          </AssociationSet>
+          <AssociationSet Name="DetailPatientVisitMsMedicine" Association="ClinicApp.DetailPatientVisitMsMedicine">
+            <End Role="DetailPatientVisit" EntitySet="DetailPatientVisits" />
+            <End Role="MsMedicine" EntitySet="MsMedicines" />
+          </AssociationSet>
+          <EntitySet Name="MsMedicineTypes" EntityType="ClinicApp.MsMedicineType" />
+          <AssociationSet Name="MsMedicineMsMedicineType" Association="ClinicApp.MsMedicineMsMedicineType">
+            <End Role="MsMedicine" EntitySet="MsMedicines" />
+            <End Role="MsMedicineType" EntitySet="MsMedicineTypes" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="MsPatient">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BinusianId" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Gender" Type="String" Nullable="false" />
+          <Property Name="BloodType" Type="String" Nullable="false" />
+          <NavigationProperty Name="PatientVisits" Relationship="ClinicApp.PatientPatientVisit" FromRole="Patient" ToRole="PatientVisit" />
+          <NavigationProperty Name="DetailHospitalizeds" Relationship="ClinicApp.PatientDetailHospitalized" FromRole="Patient" ToRole="DetailHospitalized" />
+          <NavigationProperty Name="MsSection" Relationship="ClinicApp.MsSectionMsPatient" FromRole="MsPatient" ToRole="MsSection" />
+          <Property Name="Phone" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PatientVisit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Anamnesis" Type="String" Nullable="false" />
+          <Property Name="Implementation" Type="String" Nullable="false" />
+          <Property Name="Notes" Type="String" Nullable="true" />
+          <NavigationProperty Name="DetailPatientVisits" Relationship="ClinicApp.PatientVisitDetailPatientVisit" FromRole="PatientVisit" ToRole="DetailPatientVisit" />
+          <NavigationProperty Name="Patient" Relationship="ClinicApp.PatientPatientVisit" FromRole="PatientVisit" ToRole="Patient" />
+          <NavigationProperty Name="MsDiagnose" Relationship="ClinicApp.MsDiagnosePatientVisit" FromRole="PatientVisit" ToRole="MsDiagnose" />
+          <Property Name="VisitDate" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DetailPatientVisit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PatientVisit" Relationship="ClinicApp.PatientVisitDetailPatientVisit" FromRole="DetailPatientVisit" ToRole="PatientVisit" />
+          <NavigationProperty Name="MsMedicines" Relationship="ClinicApp.DetailPatientVisitMsMedicine" FromRole="DetailPatientVisit" ToRole="MsMedicine" />
+        </EntityType>
+        <EntityType Name="MsMedicinePurchase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Total" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DetailMedicinePurchases" Relationship="ClinicApp.MedicinePurchaseDetailMedicinePurchase" FromRole="MedicinePurchase" ToRole="DetailMedicinePurchase" />
+        </EntityType>
+        <EntityType Name="MsMedicine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="MedicineStocks" Relationship="ClinicApp.MedicineMedicineStock" FromRole="Medicine" ToRole="MedicineStock" />
+          <NavigationProperty Name="DetailMedicinePurchases" Relationship="ClinicApp.MedicineDetailMedicinePurchase" FromRole="Medicine" ToRole="DetailMedicinePurchase" />
+          <NavigationProperty Name="DetailPatientVisit" Relationship="ClinicApp.DetailPatientVisitMsMedicine" FromRole="MsMedicine" ToRole="DetailPatientVisit" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="MsMedicineTypes" Relationship="ClinicApp.MsMedicineMsMedicineType" FromRole="MsMedicine" ToRole="MsMedicineType" />
+        </EntityType>
+        <EntityType Name="MedicineStock">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExpDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Medicine" Relationship="ClinicApp.MedicineMedicineStock" FromRole="MedicineStock" ToRole="Medicine" />
+        </EntityType>
+        <EntityType Name="DetailMedicinePurchase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Price" Type="String" Nullable="false" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <Property Name="ExpDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="MedicinePurchase" Relationship="ClinicApp.MedicinePurchaseDetailMedicinePurchase" FromRole="DetailMedicinePurchase" ToRole="MedicinePurchase" />
+          <NavigationProperty Name="Medicine" Relationship="ClinicApp.MedicineDetailMedicinePurchase" FromRole="DetailMedicinePurchase" ToRole="Medicine" />
+        </EntityType>
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" />
+          <Property Name="Pass" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DetailHospitalized">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HospitalName" Type="String" Nullable="false" />
+          <Property Name="Notes" Type="String" Nullable="false" />
+          <NavigationProperty Name="Patient" Relationship="ClinicApp.PatientDetailHospitalized" FromRole="DetailHospitalized" ToRole="Patient" />
+          <NavigationProperty Name="Hospitalized" Relationship="ClinicApp.HospitalizedDetailHospitalized" FromRole="DetailHospitalized" ToRole="Hospitalized" />
+          <NavigationProperty Name="MsDiagnose" Relationship="ClinicApp.MsDiagnoseDetailHospitalized" FromRole="DetailHospitalized" ToRole="MsDiagnose" />
+        </EntityType>
+        <EntityType Name="MsHospitalized">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="DetailHospitalizeds" Relationship="ClinicApp.HospitalizedDetailHospitalized" FromRole="Hospitalized" ToRole="DetailHospitalized" />
+        </EntityType>
+        <Association Name="MedicinePurchaseDetailMedicinePurchase">
+          <End Type="ClinicApp.MsMedicinePurchase" Role="MedicinePurchase" Multiplicity="1" />
+          <End Type="ClinicApp.DetailMedicinePurchase" Role="DetailMedicinePurchase" Multiplicity="*" />
+        </Association>
+        <Association Name="MedicineMedicineStock">
+          <End Type="ClinicApp.MsMedicine" Role="Medicine" Multiplicity="1" />
+          <End Type="ClinicApp.MedicineStock" Role="MedicineStock" Multiplicity="*" />
+        </Association>
+        <Association Name="MedicineDetailMedicinePurchase">
+          <End Type="ClinicApp.MsMedicine" Role="Medicine" Multiplicity="1" />
+          <End Type="ClinicApp.DetailMedicinePurchase" Role="DetailMedicinePurchase" Multiplicity="0..1" />
+        </Association>
+        <Association Name="PatientVisitDetailPatientVisit">
+          <End Type="ClinicApp.PatientVisit" Role="PatientVisit" Multiplicity="1" />
+          <End Type="ClinicApp.DetailPatientVisit" Role="DetailPatientVisit" Multiplicity="*" />
+        </Association>
+        <Association Name="PatientPatientVisit">
+          <End Type="ClinicApp.MsPatient" Role="Patient" Multiplicity="1" />
+          <End Type="ClinicApp.PatientVisit" Role="PatientVisit" Multiplicity="*" />
+        </Association>
+        <Association Name="PatientDetailHospitalized">
+          <End Type="ClinicApp.MsPatient" Role="Patient" Multiplicity="1" />
+          <End Type="ClinicApp.DetailHospitalized" Role="DetailHospitalized" Multiplicity="*" />
+        </Association>
+        <Association Name="HospitalizedDetailHospitalized">
+          <End Type="ClinicApp.MsHospitalized" Role="Hospitalized" Multiplicity="1" />
+          <End Type="ClinicApp.DetailHospitalized" Role="DetailHospitalized" Multiplicity="*" />
+        </Association>
+        <EntityType Name="MsDiagnose">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DiagnoseName" Type="String" Nullable="false" />
+          <NavigationProperty Name="DetailHospitalizeds" Relationship="ClinicApp.MsDiagnoseDetailHospitalized" FromRole="MsDiagnose" ToRole="DetailHospitalized" />
+          <NavigationProperty Name="PatientVisits" Relationship="ClinicApp.MsDiagnosePatientVisit" FromRole="MsDiagnose" ToRole="PatientVisit" />
+        </EntityType>
+        <EntityType Name="MsSection">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SectionName" Type="String" Nullable="false" />
+          <Property Name="Abbr" Type="String" Nullable="false" />
+          <NavigationProperty Name="MsPatients" Relationship="ClinicApp.MsSectionMsPatient" FromRole="MsSection" ToRole="MsPatient" />
+        </EntityType>
+        <Association Name="MsSectionMsPatient">
+          <End Type="ClinicApp.MsSection" Role="MsSection" Multiplicity="1" />
+          <End Type="ClinicApp.MsPatient" Role="MsPatient" Multiplicity="*" />
+        </Association>
+        <Association Name="MsDiagnoseDetailHospitalized">
+          <End Type="ClinicApp.MsDiagnose" Role="MsDiagnose" Multiplicity="1" />
+          <End Type="ClinicApp.DetailHospitalized" Role="DetailHospitalized" Multiplicity="*" />
+        </Association>
+        <Association Name="MsDiagnosePatientVisit">
+          <End Type="ClinicApp.MsDiagnose" Role="MsDiagnose" Multiplicity="1" />
+          <End Type="ClinicApp.PatientVisit" Role="PatientVisit" Multiplicity="*" />
+        </Association>
+        <Association Name="DetailPatientVisitMsMedicine">
+          <End Type="ClinicApp.DetailPatientVisit" Role="DetailPatientVisit" Multiplicity="*" />
+          <End Type="ClinicApp.MsMedicine" Role="MsMedicine" Multiplicity="1" />
+        </Association>
+        <EntityType Name="MsMedicineType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="String" Nullable="false" />
+          <NavigationProperty Name="MsMedicine" Relationship="ClinicApp.MsMedicineMsMedicineType" FromRole="MsMedicineType" ToRole="MsMedicine" />
+        </EntityType>
+        <Association Name="MsMedicineMsMedicineType">
+          <End Type="ClinicApp.MsMedicine" Role="MsMedicine" Multiplicity="*" />
+          <End Type="ClinicApp.MsMedicineType" Role="MsMedicineType" Multiplicity="1" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ClinicAppStoreContainer" CdmEntityContainer="KlinikModelContainer">
+    <EntitySetMapping Name="MsPatients">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.MsPatient)">
+        <MappingFragment StoreEntitySet="MsPatients">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="BinusianId" ColumnName="BinusianId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="BloodType" ColumnName="BloodType" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientVisits">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.PatientVisit)">
+        <MappingFragment StoreEntitySet="PatientVisits">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Anamnesis" ColumnName="Anamnesis" />
+          <ScalarProperty Name="Implementation" ColumnName="Implementation" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="VisitDate" ColumnName="VisitDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DetailPatientVisits">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.DetailPatientVisit)">
+        <MappingFragment StoreEntitySet="DetailPatientVisits">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MsMedicinePurchases">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.MsMedicinePurchase)">
+        <MappingFragment StoreEntitySet="MsMedicinePurchases">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MsMedicines">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.MsMedicine)">
+        <MappingFragment StoreEntitySet="MsMedicines">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MedicineStocks">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.MedicineStock)">
+        <MappingFragment StoreEntitySet="MedicineStocks">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DetailMedicinePurchases">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.DetailMedicinePurchase)">
+        <MappingFragment StoreEntitySet="DetailMedicinePurchases">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Qty" ColumnName="Qty" />
+          <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Admins">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.Admin)">
+        <MappingFragment StoreEntitySet="Admins">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="Pass" ColumnName="Pass" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DetailHospitalizeds">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.DetailHospitalized)">
+        <MappingFragment StoreEntitySet="DetailHospitalizeds">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="HospitalName" ColumnName="HospitalName" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MsHospitalizeds">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.MsHospitalized)">
+        <MappingFragment StoreEntitySet="MsHospitalizeds">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MsDiagnoses">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.MsDiagnose)">
+        <MappingFragment StoreEntitySet="MsDiagnoses">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DiagnoseName" ColumnName="DiagnoseName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MsSections">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.MsSection)">
+        <MappingFragment StoreEntitySet="MsSections">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SectionName" ColumnName="SectionName" />
+          <ScalarProperty Name="Abbr" ColumnName="Abbr" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MsMedicineTypes">
+      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.MsMedicineType)">
+        <MappingFragment StoreEntitySet="MsMedicineTypes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="MedicinePurchaseDetailMedicinePurchase" TypeName="ClinicApp.MedicinePurchaseDetailMedicinePurchase" StoreEntitySet="DetailMedicinePurchases">
+      <EndProperty Name="MedicinePurchase">
+        <ScalarProperty Name="Id" ColumnName="MedicinePurchase_Id" />
+      </EndProperty>
+      <EndProperty Name="DetailMedicinePurchase">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MedicineMedicineStock" TypeName="ClinicApp.MedicineMedicineStock" StoreEntitySet="MedicineStocks">
+      <EndProperty Name="Medicine">
+        <ScalarProperty Name="Id" ColumnName="Medicine_Id" />
+      </EndProperty>
+      <EndProperty Name="MedicineStock">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MedicineDetailMedicinePurchase" TypeName="ClinicApp.MedicineDetailMedicinePurchase" StoreEntitySet="DetailMedicinePurchases">
+      <EndProperty Name="Medicine">
+        <ScalarProperty Name="Id" ColumnName="Medicine_Id" />
+      </EndProperty>
+      <EndProperty Name="DetailMedicinePurchase">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PatientVisitDetailPatientVisit" TypeName="ClinicApp.PatientVisitDetailPatientVisit" StoreEntitySet="DetailPatientVisits">
+      <EndProperty Name="PatientVisit">
+        <ScalarProperty Name="Id" ColumnName="PatientVisit_Id" />
+      </EndProperty>
+      <EndProperty Name="DetailPatientVisit">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PatientPatientVisit" TypeName="ClinicApp.PatientPatientVisit" StoreEntitySet="PatientVisits">
+      <EndProperty Name="Patient">
+        <ScalarProperty Name="Id" ColumnName="Patient_Id" />
+      </EndProperty>
+      <EndProperty Name="PatientVisit">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="PatientDetailHospitalized" TypeName="ClinicApp.PatientDetailHospitalized" StoreEntitySet="DetailHospitalizeds">
+      <EndProperty Name="Patient">
+        <ScalarProperty Name="Id" ColumnName="Patient_Id" />
+      </EndProperty>
+      <EndProperty Name="DetailHospitalized">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="HospitalizedDetailHospitalized" TypeName="ClinicApp.HospitalizedDetailHospitalized" StoreEntitySet="DetailHospitalizeds">
+      <EndProperty Name="Hospitalized">
+        <ScalarProperty Name="Id" ColumnName="Hospitalized_Id" />
+      </EndProperty>
+      <EndProperty Name="DetailHospitalized">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MsSectionMsPatient" TypeName="ClinicApp.MsSectionMsPatient" StoreEntitySet="MsPatients">
+      <EndProperty Name="MsSection">
+        <ScalarProperty Name="Id" ColumnName="MsSection_Id" />
+      </EndProperty>
+      <EndProperty Name="MsPatient">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MsDiagnoseDetailHospitalized" TypeName="ClinicApp.MsDiagnoseDetailHospitalized" StoreEntitySet="DetailHospitalizeds">
+      <EndProperty Name="MsDiagnose">
+        <ScalarProperty Name="Id" ColumnName="MsDiagnose_Id" />
+      </EndProperty>
+      <EndProperty Name="DetailHospitalized">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MsDiagnosePatientVisit" TypeName="ClinicApp.MsDiagnosePatientVisit" StoreEntitySet="PatientVisits">
+      <EndProperty Name="MsDiagnose">
+        <ScalarProperty Name="Id" ColumnName="MsDiagnose_Id" />
+      </EndProperty>
+      <EndProperty Name="PatientVisit">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="DetailPatientVisitMsMedicine" TypeName="ClinicApp.DetailPatientVisitMsMedicine" StoreEntitySet="DetailPatientVisits">
+      <EndProperty Name="MsMedicine">
+        <ScalarProperty Name="Id" ColumnName="MsMedicines_Id" />
+      </EndProperty>
+      <EndProperty Name="DetailPatientVisit">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MsMedicineMsMedicineType" TypeName="ClinicApp.MsMedicineMsMedicineType" StoreEntitySet="MsMedicines">
+      <EndProperty Name="MsMedicineType">
+        <ScalarProperty Name="Id" ColumnName="MsMedicineTypes_Id" />
+      </EndProperty>
+      <EndProperty Name="MsMedicine">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

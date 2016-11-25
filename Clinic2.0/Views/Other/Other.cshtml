@@ -1,0 +1,50 @@
+﻿
+@{
+    Layout = "";
+    ViewBag.Title = "Log In";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom Theme files -->
+    <link href="~/fonts/flaticon.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.css" rel="stylesheet" />
+    <script src="~/scripts/jquery-3.1.0.min.js"></script>
+    <script src="~/scripts/bootstrap.min.js"></script>
+    <!-- Custom and plugin javascript -->
+    <script src="~/scripts/custom.js"></script>
+    <link href="~/Content/custom.css" rel="stylesheet" />
+    <script src="~/scripts/jquery.nicescroll.js"></script>
+</head>
+<body id="loginpage" >
+    <div class="container">
+
+        <div class="loginForm centerizeLogin">
+        <form class="form-signin ">
+            <div class="col-md-offset-4">
+                <img src="~/Images/binus.png" class="brandImg" />
+                <img src="~/Images/hec.png" class="brandImg" />
+            </div>
+
+
+            <input type="text" id="Uname" class="form-control loginForm" placeholder="Username" required autofocus>
+            <input type="password" id="Password" class="form-control loginForm" placeholder="Password" required>
+            <br />
+            <button class="loginForm btn btn-lg btn-success btn-block" type="button">Log In</button>
+        </form>
+</div>
+
+    </div> 
+   
+</body>
+</html>
+

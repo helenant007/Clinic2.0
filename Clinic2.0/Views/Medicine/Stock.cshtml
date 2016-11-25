@@ -1,0 +1,278 @@
+﻿
+@{
+    ViewBag.Title = "Medicine's Stock";
+}
+
+<script src="~/scripts/angular.min.js"></script>
+<script>
+    var ref;
+
+    (function () {
+
+        angular
+            .module('myApp', [])
+            .controller('myCtrl', function ($http) {
+
+                var vm = this;
+                ref = vm;
+
+                vm.handleServerError =
+                    function errorCallback(err) {
+                        alert("Server Error!");  //see, kita udah pake fungsi ini 3 kali wkwkwk iya juga
+                        //dari kemaren keluar alert server error ini kalo udah ditunggu beberapa saat di bagian stock karena dia ga bisa
+                        //binding data mungkin?
+                    };
+
+                vm.selectMonth = (new Date().getMonth()).toString();
+                vm.meds = [];
+                vm.med = null;
+
+                $http.post('@Url.Action("StockViewModel")').then(
+                    function (res) {
+                        vm.meds = res.data.Medicines;
+                    }, vm.handleServerError);
+
+
+                //lu mw coba bikin Function di Controllernya gk? jgn sekarang deh wkwkw
+                //hmm ini ez bngt pdahal otak gw belom bekerja efisien wkwk ok nak malem
+                vm.medTypes = [];
+
+
+                $http.post('@Url.Action("GetMedicineTypes")').then(
+                    function success(data) {
+                        vm.medtypes = data.data;
+                    }, vm.handleServerError
+                );
+
+                vm.removeMedicine =
+                    {
+                        remove: function (med) { 
+                            $http.post('@Url.Action("DeleteMedicine")', { id: med.Id }).then(successCallback, vm.handleServerError);
+
+                            function successCallback(res) {
+                                if (res.data == true) {
+                                    //vm.meds = [{ a: 1, b: 2 }];
+                                    vm.meds.splice(vm.meds.indexOf(med), 1);
+                                }
+                            }
+                        }
+                    }
+
+                vm.addMedicine =
+                        {
+                            Name: "",
+                            Type: "",
+
+                            modal: function () {
+                                $("#modalAddMedicine").modal('show');
+                            },
+                            validate: function () {
+                                if (this.Name == "" || this.Type == "")
+                                    return false;
+                                return true;
+                            },
+                            isSaving: false,
+                            save: function () {
+                                if (this.validate() == false) {
+                                    alert("");
+                                    return;
+                                }
+
+
+                                if (vm.addMedicine.isSaving) {
+                                    alert("Please wait. Server is processing your request.");
+                                    return;
+                                }
+
+                                vm.addMedicine.isSaving = true;
+
+                                $http.post('@Url.Action("AddMedicine")', { name: vm.addMedicine.Name, type: vm.addMedicine.Type }).then(successCallback, errorCallback);
+
+                                function successCallback(res) {
+                                    vm.meds.push({
+                                        Id: res.data.Id,
+                                        Name: res.data.Name,
+                                        Qty: res.data.Qty,
+                                        Type: res.data.Type
+                                    });
+
+                                    vm.addMedicine.isSaving = false;
+                                }
+                                function errorCallback(err) {
+                                    vm.handleServerError();
+                                    vm.addMedicine.isSaving = false;
+                                }
+
+                                vm.addMedicine.Name = "";
+                                vm.addMedicine.Type = "";
+                            }
+                        };
+
+
+
+                vm.modalShowData = function () {
+                    $("#modalShowData").modal();
+
+                };
+            });
+
+    })()
+</script>
+
+<div ng-app="myApp" ng-controller="myCtrl as vm">
+
+    <div>
+
+        <div id="modalShowData" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Medicine Details</h4>
+                    </div>
+                    <div class="modal-body">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" placeholder="Name" ng-model="vm.modal.data.Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Type</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" ng-model="vm.modal.data.Type">
+                                            <option ng-repeat="x in vm.medTypes" value="{{x.Value}}">{{x.Value}}</option> 
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Stock</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" placeholder="Stock" ng-model="vm.modal.data.Stock">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Expired Dates</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" ng-model="vm.modal.data.ExpDates">
+                                            <option ng-repeat="x in vm.medTypes" value="{{x.Value}}">{{x.Value}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-ok"> &nbsp; &nbsp; Save Changes</i></button>
+                        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" ng-click="vm.removeMedicine.remove(med)"><i class="glyphicon glyphicon-remove"> &nbsp; &nbsp; Delete Data</i> </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
+        <div id="modalAddMedicine" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Add Medicine</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" placeholder="Medicine's Name" ng-model="vm.addMedicine.Name">
+                        <select class="form-control" ng-model="vm.addMedicine.Type">
+                            <option>Select Type</option>
+                            <option ng-repeat="type in vm.medTypes" value="{{type.Value}}">{{type.Value}}</option>
+
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" ng-click="vm.addMedicine.save()">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <div id="modalEditMedicine" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Edit Medicine</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">@@</span>
+                            <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                        </div>
+
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+                            <span class="input-group-addon" id="basic-addon2">@@example.com</span>
+                        </div>
+
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                            <span class="input-group-addon">.00</span>
+                        </div>
+
+                        <label for="basic-url">Your vanity URL</label>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon3">https://example.com/users/</span>
+                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+    </div>
+
+    <div class="content-top-1 transparent">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="btn-group pull-right">
+                    <div class="col-sm-5 pull-right">
+                        <select class="form-control" ng-model="vm.selectMonth">
+                            <option ng-repeat="x in vm.monthsInYear" value="{{x.Value}}">{{x.MonthName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <h3>Medicine</h3>
+            </div>
+            <div class="panel-body">
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Stock</th>
+                            <th>Nearest Exp Date</th>
+
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- perhatikan baik baik  : istilahnya mirip foreach : ok? ke napa itu mirip json, karena itu emang struktur json ntapz -->
+
+                        <tr ng-repeat="med in vm.meds" ng-click="vm.modalShowData()">
+                            <!--nanti modal nya isinya: tanggal2 exp date, trus kapan aja obat dipake sama pasien-->
+                            <td>{{med.Name}}</td>
+                            <td>{{med.Type}}</td>
+                            <td>{{med.Qty}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <input type="button" class="btn btn-default" value="Add Medicine" ng-click="vm.addMedicine.modal()" />
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+</div>

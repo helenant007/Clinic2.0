@@ -1,0 +1,350 @@
+﻿
+@{
+    ViewBag.Title = "Hospitalized Visitors";
+}
+
+<link rel="stylesheet" href="~/Content/pickaday.default.css" />
+<link rel="stylesheet" href="~/Content/pickaday.default.date.css" />
+<link rel="stylesheet" href="~/Content/pickaday.default.time.css" />
+<script src="~/scripts/picker.js"></script>
+<script src="~/scripts/picker.date.js"></script>
+<script>
+    $(function () {
+        $(".pickadate").pickadate();
+    })
+</script>
+<script src="~/scripts/angular.min.js"></script>
+
+<script>
+    var ref;
+
+    (function () {
+
+        angular
+        .module('addHospitalized', [])
+        .controller('myCtrl', function ($http){
+            var vm = this;
+            ref = vm;
+
+            vm.med = null;
+
+            vm.selectMonth = (new Date().getMonth() + 1).toString();
+            vm.monthsInYear= [];
+            vm.sectionList = [];
+            vm.diagnoses = [];
+
+            vm.addHVisitor = {
+                Data: {
+                    Anamnesis: null,
+                    Implementation: null,
+                    Diagnose: 'null',
+                    Notes: null,
+
+                    Gender: 'null',
+                    BloodType: 'null',
+                    BinusianID: null,
+                    Name: null,
+                    Phone: null,
+                    Section: 'null',
+
+                    VisitDate: today,
+                }
+            };
+
+
+            $http.post('@Url.Action("GetMonthsData","Shared")').then(function success(res) {
+                vm.monthsInYear = res.data;
+            });
+
+            $http.post('@Url.Action("GetSectionList","Shared")').then(function success(res) {
+                vm.sectionList = res.data;
+            });
+
+            $http.post('@Url.Action("GetDiagnoses","Shared")').then(function success(res) {
+                vm.diagnoses = res.data;
+            });
+
+        })
+    })()
+</script>
+
+<div id="modalShow" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header modal-info">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Hospitalized Visitor Details</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Date</label>
+                        <div class="col-sm-9">
+                            <input type="date" class="form-control" placeholder="Pick Date" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Section</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" ng-model="vm.addHVisitor.Section">
+                                <option disabled>Select Section:</option>
+                                <option selected>Mahasiswa</option>
+                                <option ng-repeat="type in vm.sectionList" value="{{type}}">{{type}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Binusian ID</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Binusian ID" ng-model="vm.addHVisitor.BinusianID" value="1801390333">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Full Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Full Name" ng-model="vm.addHVisitor.Name" value="Helena Natanael">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Gender</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" ng-model="vm.modal.data.Gender">
+                                <option disabled value="null">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Blood Type</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" ng-model="vm.modal.data.BloodType">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="AB">AB</option>
+                                <option value="O">O</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Phone</label>
+                        <div class="col-sm-9">
+                            <input type="datetime" class="form-control" placeholder="Cellphone/Extension" ng-model="vm.addHVisitor.Phone" value="0813213123">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Diagnose</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" ng-model="vm.addHVisitor.Diagnose">
+                                <option selected disabled>Select Diagnose</option>
+                                <option ng-repeat="type in vm.sectionList" value="{{type}}">{{type}}</option>
+                                <option>Dislocated Joint</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Hospital's Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Hospitals Name" ng-model="vm.addHVisitor.HospitalName" value="Heal Hospital">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Notes</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" placeholder="Notes" ng-model="vm.addHVisitor.Notes">already taken care</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i>&nbsp; &nbsp; Close</button>
+                <button type="submit" class="btn btn-success btn-sm" disabled><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> &nbsp; &nbsp; Save Changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="modalDelete" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header modal-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Delete Data</h4>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" ng-click="vm.removeHVisitor.remove(med)">Yes</button>
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-app="addHospitalized" ng-controller="myCtrl as vm">
+
+    <div class="content-top-1 transparent">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3>Hospitalized Visitor Detail</h3>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <br />
+                        <label class="col-sm-2 control-label"></label> <!--nanti ini selalu ambil date di saat dia di input-->
+                        <div class="col-sm-8">
+                            <span id="dateToday"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <select class="form-control" ng-model="vm.addHVisitor.Data.Section">
+                                <option disabled value="null">Select Section</option>
+                                <option ng-repeat="type in vm.sectionList" value="{{type.SectionName}}">{{type.SectionName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" placeholder="Binusian ID" ng-model="vm.addHVisitor.Data.BinusianID">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" placeholder="Full Name" ng-model="vm.addHVisitor.Data.Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <select class="form-control" ng-model="vm.addHVisitor.Data.Gender">
+                                <option disabled value="null">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <select class="form-control" ng-model="vm.addHVisitor.Data.BloodType">
+                                <option disabled value="null">Select Blood Type</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="AB">AB</option>
+                                <option value="O">O</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" placeholder="Cellphone/Extension" ng-model="vm.addHVisitor.Data.Phone">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <select class="form-control" ng-model="vm.addHVisitor.Data.Diagnose">
+                                <option disabled value="null">Select Diagnose</option>
+                                <option ng-repeat="type in vm.diagnoses" value="{{type.DiagnoseName}}">{{type.DiagnoseName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" placeholder="Hospital's Name" ng-model="vm.addHVisitor.Data.Anamnesis">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" placeholder="Notes" ng-model="vm.addHVisitor.Data.Notes"></textarea>
+                        </div>
+                    </div>
+                   
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp; &nbsp; Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-top-1 transparent">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="col-sm-5 pull-right">
+                    <select class="form-control" ng-model="vm.selectMonth">
+                        <option ng-repeat="x in vm.monthsInYear" value="{{x.Value}}">{{x.MonthName}}</option>
+                    </select>
+                </div>
+                <h3>Hospitalized Visitor History</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Section</th>
+                            <th>Binusian ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Diagnose</th>
+                            <th>Hospital's Name</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       <tr data-toggle="modal" data-target="#modalShow">
+                           <td>12/09/2016</td>
+                           <td>Mahasiswa</td>
+                           <td>1801380333</td>
+                           <td>Helena Natanael</td>
+                           <td>0813213123</td>
+                           <td>Dislocated Joint</td>
+                           <td>Heal Hospital</td>
+                           <td>already taken care</td>
+                           <td> <i class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#modalDelete"></i> </td>
+                       </tr>
+                        <tr ng-repeat="med in vm.meds">
+                            <td>{{med.Name}}</td>
+                            <td>{{med.Type}}</td>
+                            <td>{{med.Qty}}</td>
+                            <td> <i class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#modalDelete"></i> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<script>
+    var today = new Date();
+    var day = today.getDay();
+    var dd = today.getDate();
+    var mm = today.getMonth();
+    var yyyy = today.getFullYear();
+
+
+
+    var weekdaysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    var monthsFull = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+
+    var showToday = weekdaysShort[day] + ', ' + dd + ' ' + monthsFull[mm] + ' ' + yyyy;
+    document.getElementById('dateToday').innerHTML = showToday;
+
+</script>
