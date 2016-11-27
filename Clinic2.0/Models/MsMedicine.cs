@@ -27,7 +27,6 @@ namespace ClinicApp.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MedicineStock> MedicineStocks { get; set; }
-        public virtual DetailMedicinePurchase DetailMedicinePurchases { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetailPatientVisit> DetailPatientVisit { get; set; }
         public virtual MsMedicineType MsMedicineTypes { get; set; }

@@ -1026,9 +1026,6 @@
     <Compile Include="Models\DetailHospitalized.cs">
       <DependentUpon>KlinikModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DetailMedicinePurchase.cs">
-      <DependentUpon>KlinikModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\DetailPatientVisit.cs">
       <DependentUpon>KlinikModel.tt</DependentUpon>
     </Compile>
@@ -1057,9 +1054,6 @@
       <DependentUpon>KlinikModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MsMedicine.cs">
-      <DependentUpon>KlinikModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\MsMedicinePurchase.cs">
       <DependentUpon>KlinikModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MsMedicineType.cs">
