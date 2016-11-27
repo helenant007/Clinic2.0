@@ -9,27 +9,17 @@
     <EntitySet Name="MsPatients" EntityType="ClinicApp.Store.MsPatients" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="PatientVisits" EntityType="ClinicApp.Store.PatientVisits" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="DetailPatientVisits" EntityType="ClinicApp.Store.DetailPatientVisits" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="MsMedicinePurchases" EntityType="ClinicApp.Store.MsMedicinePurchases" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MsMedicines" EntityType="ClinicApp.Store.MsMedicines" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MedicineStocks" EntityType="ClinicApp.Store.MedicineStocks" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="DetailMedicinePurchases" EntityType="ClinicApp.Store.DetailMedicinePurchases" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Admins" EntityType="ClinicApp.Store.Admins" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="DetailHospitalizeds" EntityType="ClinicApp.Store.DetailHospitalizeds" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MsHospitalizeds" EntityType="ClinicApp.Store.MsHospitalizeds" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MsDiagnoses" EntityType="ClinicApp.Store.MsDiagnoses" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MsSections" EntityType="ClinicApp.Store.MsSections" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MsMedicineTypes" EntityType="ClinicApp.Store.MsMedicineTypes" store:Type="Tables" Schema="dbo" />
-    <AssociationSet Name="MedicinePurchaseDetailMedicinePurchase" Association="ClinicApp.Store.MedicinePurchaseDetailMedicinePurchase">
-      <End Role="MedicinePurchase" EntitySet="MsMedicinePurchases" />
-      <End Role="DetailMedicinePurchase" EntitySet="DetailMedicinePurchases" />
-    </AssociationSet>
     <AssociationSet Name="MedicineMedicineStock" Association="ClinicApp.Store.MedicineMedicineStock">
       <End Role="Medicine" EntitySet="MsMedicines" />
       <End Role="MedicineStock" EntitySet="MedicineStocks" />
-    </AssociationSet>
-    <AssociationSet Name="MedicineDetailMedicinePurchase" Association="ClinicApp.Store.MedicineDetailMedicinePurchase">
-      <End Role="Medicine" EntitySet="MsMedicines" />
-      <End Role="DetailMedicinePurchase" EntitySet="DetailMedicinePurchases" />
     </AssociationSet>
     <AssociationSet Name="PatientVisitDetailPatientVisit" Association="ClinicApp.Store.PatientVisitDetailPatientVisit">
       <End Role="PatientVisit" EntitySet="PatientVisits" />
@@ -101,14 +91,6 @@
     <Property Name="PatientVisit_Id" Type="int" Nullable="false" />
     <Property Name="MsMedicines_Id" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="MsMedicinePurchases">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Date" Type="datetime" Nullable="false" />
-    <Property Name="Total" Type="int" Nullable="false" />
-  </EntityType>
   <EntityType Name="MsMedicines">
     <Key>
       <PropertyRef Name="Id" />
@@ -124,17 +106,6 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ExpDate" Type="datetime" Nullable="false" />
-    <Property Name="Medicine_Id" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="DetailMedicinePurchases">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Price" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Qty" Type="int" Nullable="false" />
-    <Property Name="ExpDate" Type="datetime" Nullable="false" />
-    <Property Name="MedicinePurchase_Id" Type="int" Nullable="false" />
     <Property Name="Medicine_Id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Admins">
@@ -185,18 +156,6 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
-  <Association Name="MedicinePurchaseDetailMedicinePurchase">
-    <End Role="MedicinePurchase" Type="ClinicApp.Store.MsMedicinePurchases" Multiplicity="1" />
-    <End Role="DetailMedicinePurchase" Type="ClinicApp.Store.DetailMedicinePurchases" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="MedicinePurchase">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="DetailMedicinePurchase">
-        <PropertyRef Name="MedicinePurchase_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="MedicineMedicineStock">
     <End Role="Medicine" Type="ClinicApp.Store.MsMedicines" Multiplicity="1" />
     <End Role="MedicineStock" Type="ClinicApp.Store.MedicineStocks" Multiplicity="*" />
@@ -205,18 +164,6 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="MedicineStock">
-        <PropertyRef Name="Medicine_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="MedicineDetailMedicinePurchase">
-    <End Role="Medicine" Type="ClinicApp.Store.MsMedicines" Multiplicity="1" />
-    <End Role="DetailMedicinePurchase" Type="ClinicApp.Store.DetailMedicinePurchases" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Medicine">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="DetailMedicinePurchase">
         <PropertyRef Name="Medicine_Id" />
       </Dependent>
     </ReferentialConstraint>
@@ -337,24 +284,14 @@
           <EntitySet Name="MsPatients" EntityType="ClinicApp.MsPatient" />
           <EntitySet Name="PatientVisits" EntityType="ClinicApp.PatientVisit" />
           <EntitySet Name="DetailPatientVisits" EntityType="ClinicApp.DetailPatientVisit" />
-          <EntitySet Name="MsMedicinePurchases" EntityType="ClinicApp.MsMedicinePurchase" />
           <EntitySet Name="MsMedicines" EntityType="ClinicApp.MsMedicine" />
           <EntitySet Name="MedicineStocks" EntityType="ClinicApp.MedicineStock" />
-          <EntitySet Name="DetailMedicinePurchases" EntityType="ClinicApp.DetailMedicinePurchase" />
           <EntitySet Name="Admins" EntityType="ClinicApp.Admin" />
           <EntitySet Name="DetailHospitalizeds" EntityType="ClinicApp.DetailHospitalized" />
           <EntitySet Name="MsHospitalizeds" EntityType="ClinicApp.MsHospitalized" />
-          <AssociationSet Name="MedicinePurchaseDetailMedicinePurchase" Association="ClinicApp.MedicinePurchaseDetailMedicinePurchase">
-            <End Role="MedicinePurchase" EntitySet="MsMedicinePurchases" />
-            <End Role="DetailMedicinePurchase" EntitySet="DetailMedicinePurchases" />
-          </AssociationSet>
           <AssociationSet Name="MedicineMedicineStock" Association="ClinicApp.MedicineMedicineStock">
             <End Role="Medicine" EntitySet="MsMedicines" />
             <End Role="MedicineStock" EntitySet="MedicineStocks" />
-          </AssociationSet>
-          <AssociationSet Name="MedicineDetailMedicinePurchase" Association="ClinicApp.MedicineDetailMedicinePurchase">
-            <End Role="Medicine" EntitySet="MsMedicines" />
-            <End Role="DetailMedicinePurchase" EntitySet="DetailMedicinePurchases" />
           </AssociationSet>
           <AssociationSet Name="PatientVisitDetailPatientVisit" Association="ClinicApp.PatientVisitDetailPatientVisit">
             <End Role="PatientVisit" EntitySet="PatientVisits" />
@@ -432,15 +369,6 @@
           <NavigationProperty Name="PatientVisit" Relationship="ClinicApp.PatientVisitDetailPatientVisit" FromRole="DetailPatientVisit" ToRole="PatientVisit" />
           <NavigationProperty Name="MsMedicines" Relationship="ClinicApp.DetailPatientVisitMsMedicine" FromRole="DetailPatientVisit" ToRole="MsMedicine" />
         </EntityType>
-        <EntityType Name="MsMedicinePurchase">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Date" Type="DateTime" Nullable="false" />
-          <Property Name="Total" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="DetailMedicinePurchases" Relationship="ClinicApp.MedicinePurchaseDetailMedicinePurchase" FromRole="MedicinePurchase" ToRole="DetailMedicinePurchase" />
-        </EntityType>
         <EntityType Name="MsMedicine">
           <Key>
             <PropertyRef Name="Id" />
@@ -448,7 +376,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" />
           <NavigationProperty Name="MedicineStocks" Relationship="ClinicApp.MedicineMedicineStock" FromRole="Medicine" ToRole="MedicineStock" />
-          <NavigationProperty Name="DetailMedicinePurchases" Relationship="ClinicApp.MedicineDetailMedicinePurchase" FromRole="Medicine" ToRole="DetailMedicinePurchase" />
           <NavigationProperty Name="DetailPatientVisit" Relationship="ClinicApp.DetailPatientVisitMsMedicine" FromRole="MsMedicine" ToRole="DetailPatientVisit" />
           <Property Name="Qty" Type="Int32" Nullable="false" />
           <NavigationProperty Name="MsMedicineTypes" Relationship="ClinicApp.MsMedicineMsMedicineType" FromRole="MsMedicine" ToRole="MsMedicineType" />
@@ -460,17 +387,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ExpDate" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="Medicine" Relationship="ClinicApp.MedicineMedicineStock" FromRole="MedicineStock" ToRole="Medicine" />
-        </EntityType>
-        <EntityType Name="DetailMedicinePurchase">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Price" Type="String" Nullable="false" />
-          <Property Name="Qty" Type="Int32" Nullable="false" />
-          <Property Name="ExpDate" Type="DateTime" Nullable="false" />
-          <NavigationProperty Name="MedicinePurchase" Relationship="ClinicApp.MedicinePurchaseDetailMedicinePurchase" FromRole="DetailMedicinePurchase" ToRole="MedicinePurchase" />
-          <NavigationProperty Name="Medicine" Relationship="ClinicApp.MedicineDetailMedicinePurchase" FromRole="DetailMedicinePurchase" ToRole="Medicine" />
         </EntityType>
         <EntityType Name="Admin">
           <Key>
@@ -499,17 +415,9 @@
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="DetailHospitalizeds" Relationship="ClinicApp.HospitalizedDetailHospitalized" FromRole="Hospitalized" ToRole="DetailHospitalized" />
         </EntityType>
-        <Association Name="MedicinePurchaseDetailMedicinePurchase">
-          <End Type="ClinicApp.MsMedicinePurchase" Role="MedicinePurchase" Multiplicity="1" />
-          <End Type="ClinicApp.DetailMedicinePurchase" Role="DetailMedicinePurchase" Multiplicity="*" />
-        </Association>
         <Association Name="MedicineMedicineStock">
           <End Type="ClinicApp.MsMedicine" Role="Medicine" Multiplicity="1" />
           <End Type="ClinicApp.MedicineStock" Role="MedicineStock" Multiplicity="*" />
-        </Association>
-        <Association Name="MedicineDetailMedicinePurchase">
-          <End Type="ClinicApp.MsMedicine" Role="Medicine" Multiplicity="1" />
-          <End Type="ClinicApp.DetailMedicinePurchase" Role="DetailMedicinePurchase" Multiplicity="0..1" />
         </Association>
         <Association Name="PatientVisitDetailPatientVisit">
           <End Type="ClinicApp.PatientVisit" Role="PatientVisit" Multiplicity="1" />
@@ -610,15 +518,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="MsMedicinePurchases">
-      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.MsMedicinePurchase)">
-        <MappingFragment StoreEntitySet="MsMedicinePurchases">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Date" ColumnName="Date" />
-          <ScalarProperty Name="Total" ColumnName="Total" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="MsMedicines">
       <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.MsMedicine)">
         <MappingFragment StoreEntitySet="MsMedicines">
@@ -632,16 +531,6 @@
       <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.MedicineStock)">
         <MappingFragment StoreEntitySet="MedicineStocks">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="DetailMedicinePurchases">
-      <EntityTypeMapping TypeName="IsTypeOf(ClinicApp.DetailMedicinePurchase)">
-        <MappingFragment StoreEntitySet="DetailMedicinePurchases">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="Qty" ColumnName="Qty" />
           <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -697,27 +586,11 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="MedicinePurchaseDetailMedicinePurchase" TypeName="ClinicApp.MedicinePurchaseDetailMedicinePurchase" StoreEntitySet="DetailMedicinePurchases">
-      <EndProperty Name="MedicinePurchase">
-        <ScalarProperty Name="Id" ColumnName="MedicinePurchase_Id" />
-      </EndProperty>
-      <EndProperty Name="DetailMedicinePurchase">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="MedicineMedicineStock" TypeName="ClinicApp.MedicineMedicineStock" StoreEntitySet="MedicineStocks">
       <EndProperty Name="Medicine">
         <ScalarProperty Name="Id" ColumnName="Medicine_Id" />
       </EndProperty>
       <EndProperty Name="MedicineStock">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="MedicineDetailMedicinePurchase" TypeName="ClinicApp.MedicineDetailMedicinePurchase" StoreEntitySet="DetailMedicinePurchases">
-      <EndProperty Name="Medicine">
-        <ScalarProperty Name="Id" ColumnName="Medicine_Id" />
-      </EndProperty>
-      <EndProperty Name="DetailMedicinePurchase">
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>

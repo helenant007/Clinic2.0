@@ -4,20 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="c8c33815d96749beb7ca671415b69c70" Name="Diagram1" ZoomLevel="97" >
+      <Diagram DiagramId="c8c33815d96749beb7ca671415b69c70" Name="Diagram1" ZoomLevel="71" >
         <EntityTypeShape EntityType="ClinicApp.MsPatient" Width="1.5" PointX="5.75" PointY="3.625" />
         <EntityTypeShape EntityType="ClinicApp.PatientVisit" Width="2" PointX="8.375" PointY="3.5" />
         <EntityTypeShape EntityType="ClinicApp.DetailPatientVisit" Width="2.5" PointX="11.25" PointY="4.625" />
-        <EntityTypeShape EntityType="ClinicApp.MsMedicinePurchase" Width="2.625" PointX="1.75" PointY="7.875" />
         <EntityTypeShape EntityType="ClinicApp.MsMedicine" Width="1.5" PointX="8.875" PointY="7.75" />
-        <EntityTypeShape EntityType="ClinicApp.MedicineStock" Width="1.5" PointX="11.125" PointY="7.875" />
-        <EntityTypeShape EntityType="ClinicApp.DetailMedicinePurchase" Width="2.125" PointX="5.625" PointY="7.625" />
+        <EntityTypeShape EntityType="ClinicApp.MedicineStock" Width="1.5" PointX="6.25" PointY="8.125" />
         <EntityTypeShape EntityType="ClinicApp.Admin" Width="1.5" PointX="2.375" PointY="2.125" />
         <EntityTypeShape EntityType="ClinicApp.DetailHospitalized" Width="2.5" PointX="10.375" PointY="0.75" />
         <EntityTypeShape EntityType="ClinicApp.MsHospitalized" Width="1.5" PointX="7.75" PointY="0.75" />
-        <AssociationConnector Association="ClinicApp.MedicinePurchaseDetailMedicinePurchase" />
         <AssociationConnector Association="ClinicApp.MedicineMedicineStock" />
-        <AssociationConnector Association="ClinicApp.MedicineDetailMedicinePurchase" />
         <AssociationConnector Association="ClinicApp.PatientVisitDetailPatientVisit" />
         <AssociationConnector Association="ClinicApp.PatientPatientVisit" />
         <AssociationConnector Association="ClinicApp.PatientDetailHospitalized" />
